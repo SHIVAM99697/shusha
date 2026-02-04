@@ -55,10 +55,15 @@ video,canvas{
   -webkit-background-clip:text;
   color:transparent;
 }
+.gifs{
+  display:flex;
+  justify-content:center;
+  gap:28px;
+}
 .gifs img{
   width:140px;
-  margin:12px;
   border-radius:22px;
+  filter:drop-shadow(0 0 18px hotpink);
   animation:pop 1s ease;
 }
 @keyframes pop{
@@ -73,8 +78,8 @@ video,canvas{
   z-index:1;
   animation:float 3s ease-in-out infinite alternate;
 }
-.tl{top:15px;left:15px}
-.br{bottom:15px;right:15px}
+.tl{top:20px;left:20px}
+.br{bottom:20px;right:20px}
 @keyframes float{
   from{transform:translateY(0)}
   to{transform:translateY(-18px)}
@@ -84,9 +89,9 @@ video,canvas{
 
 <body>
 
-<!-- STICKERS -->
-<img src="kiss.gif" class="sticker tl">
-<img src="birthday.gif" class="sticker br">
+<!-- 🔥 CORNER STICKERS -->
+<img src="https://media.tenor.com/QZkZaI6cNe4AAAaj/kitty.gif" class="sticker tl">
+<img src="https://media1.tenor.com/m/aTrN4Lm3J0AAAAd/brown-cony.gif" class="sticker br">
 
 <div class="wrap">
   <div class="box">
@@ -99,9 +104,9 @@ video,canvas{
   <div id="result" style="display:none">
     <div class="hb">🎉 Happy Birthday 🎂</div>
     <div class="gifs">
-      <img src="kiss.gif">
-      <img src="birthday.gif">
-      <img src="kiss.gif">
+      <img src="https://media.tenor.com/QZkZaI6cNe4AAAaj/kitty.gif">
+      <img src="https://media1.tenor.com/m/aTrN4Lm3J0AAAAd/brown-cony.gif">
+      <img src="https://media.tenor.com/QZkZaI6cNe4AAAaj/kitty.gif">
     </div>
   </div>
 </div>
