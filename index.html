@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>🎂 Birthday Surprise</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;height:100vh;
+  display:flex;justify-content:center;align-items:center;
+  background:radial-gradient(circle at top,#ff4e8e,#120018);
+  font-family:'Poppins',Arial;
+  overflow:hidden;color:white
+}
+.card{
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(14px);
+  padding:45px 55px;
+  border-radius:30px;
+  text-align:center;
+  box-shadow:0 0 80px rgba(255,46,99,.8);
+  animation:zoomIn 1.4s ease;
+}
+@keyframes zoomIn{
+  from{transform:scale(.3);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+h1{
+  font-size:46px;
+  margin:0;
+  background:linear-gradient(90deg,#ff9a9e,#fad0c4,#ff9a9e);
+  -webkit-background-clip:text;
+  color:transparent;
+  animation:shine 3s linear infinite;
+}
+@keyframes shine{
+  to{background-position:200%}
+}
+#type{
+  margin:20px 0;
+  font-size:20px;
+  min-height:28px;
+}
+button{
+  padding:16px 48px;
+  border:none;border-radius:40px;
+  background:linear-gradient(135deg,#ff2e63,#ff7eb3);
+  color:white;font-size:22px;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(255,46,99,.8);
+  transition:.3s;
+}
+button:hover{transform:scale(1.12)}
+.heart{
+  position:absolute;
+  font-size:28px;
+  animation:floatUp 8s linear infinite;
+}
+@keyframes floatUp{
+  from{bottom:-10%;opacity:1}
+  to{bottom:110%;opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>Happy Birthday 🎉</h1>
+  <div id="type"></div>
+  <button onclick="location.href='camera.html'">💋 Start Surprise</button>
+</div>
+
+<script>
+/* typing effect */
+const text="Give a kiss 😘 to unlock something special...";
+let i=0;
+const el=document.getElementById("type");
+const t=setInterval(()=>{
+  el.innerHTML+=text[i++];
+  if(i===text.length)clearInterval(t);
+},60);
+
+/* floating hearts */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText=["💖","💗","💘","💕"][Math.floor(Math.random()*4)];
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),8000);
+},300);
+</script>
+
+</body>
+</html>
