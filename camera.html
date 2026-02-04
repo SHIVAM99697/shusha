@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>🎂 Birthday Magic</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;height:100vh;
+  display:flex;justify-content:center;align-items:center;
+  background:radial-gradient(circle,#0f0022,#000);
+  font-family:'Poppins',Arial;color:white;
+  overflow:hidden
+}
+.wrap{text-align:center}
+.box{
+  position:relative;
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:0 0 90px rgba(255,46,99,1);
+  animation:neonGlow 2s infinite alternate;
+}
+@keyframes neonGlow{
+  to{box-shadow:0 0 140px rgba(255,46,99,1)}
+}
+video,canvas{
+  width:440px;height:330px;
+  object-fit:cover;
+}
+.frame{
+  position:absolute;inset:0;
+  border:16px solid #ff2e63;
+  border-radius:28px;
+}
+#count{
+  position:absolute;inset:0;
+  display:flex;justify-content:center;align-items:center;
+  font-size:130px;
+  background:rgba(0,0,0,.6);
+  animation:pulse .8s infinite alternate;
+}
+@keyframes pulse{
+  to{transform:scale(1.15)}
+}
+#flash{
+  position:fixed;inset:0;
+  background:white;
+  opacity:0;
+}
+.hb{
+  font-size:52px;
+  margin:22px 0;
+  background:linear-gradient(90deg,#ff9a9e,#fad0c4,#ff9a9e);
+  -webkit-background-clip:text;
+  color:transparent;
+  animation:slideUp 1.2s ease;
+}
+@keyframes slideUp{
+  from{transform:translateY(60px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+.gifs img{
+  width:140px;
+  margin:12px;
+  border-radius:22px;
+  animation:pop 1s ease;
+}
+@keyframes pop{
+  from{transform:scale(.2);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+.particle{
+  position:absolute;
+  font-size:26px;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  from{top:-10%}
+  to{top:110%}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+  <div class="box">
+    <video id="v" autoplay playsinline></video>
+    <canvas id="c" style="display:none"></canvas>
+    <div class="frame"></div>
+    <div id="count" style="display:none">3</div>
+  </div>
+
+  <div id="result" style="display:none">
+    <div class="hb">🎉 Happy Birthday 🎂</div>
+
+    <!-- 🔥 APNI GIF LINKS YAHA DAALE -->
+    <div class="gifs">
+      <img src="GIF_LINK_1">
+      <img src="GIF_LINK_2">
+      <img src="GIF_LINK_3">
+    </div>
+  </div>
+</div>
+
+<div id="flash"></div>
+
+<script>
+const v=document.getElementById("v");
+const c=document.getElementById("c");
+const count=document.getElementById("count");
+const res=document.getElementById("result");
+const flash=document.getElementById("flash");
+
+let started=false,captured=false;
+
+/* camera */
+navigator.mediaDevices.getUserMedia({video:true})
+  .then(s=>v.srcObject=s);
+
+/* face detect */
+const fd=new FaceDetection({
+  locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${f}`
+});
+fd.setOptions({model:"short",minDetectionConfidence:.4});
+
+fd.onResults(r=>{
+  if(r.detections.length>0 && !started && !captured){
+    started=true;
+    countdown();
+  }
+});
+
+const cam=new Camera(v,{
+  onFrame:async()=>fd.send({image:v}),
+  width:440,height:330
+});
+cam.start();
+
+/* countdown */
+function countdown(){
+  let n=3;
+  count.style.display="flex";
+  count.textContent=n;
+  const id=setInterval(()=>{
+    n--;
+    if(n>0){
+      count.textContent=n;
+    }else{
+      clearInterval(id);
+      count.style.display="none";
+      snap();
+    }
+  },1000);
+}
+
+/* snap */
+function snap(){
+  captured=true;
+
+  flash.style.opacity=1;
+  setTimeout(()=>flash.style.opacity=0,200);
+
+  c.width=v.videoWidth;
+  c.height=v.videoHeight;
+  c.getContext("2d").drawImage(v,0,0,c.width,c.height);
+
+  v.style.display="none";
+  c.style.display="block";
+  res.style.display="block";
+  particles();
+}
+
+/* particles */
+function particles(){
+  for(let i=0;i<60;i++){
+    const p=document.createElement("div");
+    p.className="particle";
+    p.innerText=Math.random()>.5?"🎊":"💖";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(Math.random()*3+3)+"s";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),7000);
+  }
+}
+</script>
+
+</body>
+</html>
