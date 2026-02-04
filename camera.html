@@ -16,7 +16,7 @@ body{
   font-family:'Poppins',Arial;color:white;
   overflow:hidden
 }
-.wrap{text-align:center}
+.wrap{text-align:center;position:relative;z-index:2}
 .box{
   position:relative;
   border-radius:28px;
@@ -24,9 +24,8 @@ body{
   box-shadow:0 0 90px rgba(255,46,99,1);
   animation:neonGlow 2s infinite alternate;
 }
-@keyframes neonGlow{
-  to{box-shadow:0 0 140px rgba(255,46,99,1)}
-}
+@keyframes neonGlow{to{box-shadow:0 0 140px rgba(255,46,99,1)}}
+
 video,canvas{
   width:440px;height:330px;
   object-fit:cover;
@@ -43,9 +42,7 @@ video,canvas{
   background:rgba(0,0,0,.6);
   animation:pulse .8s infinite alternate;
 }
-@keyframes pulse{
-  to{transform:scale(1.15)}
-}
+@keyframes pulse{to{transform:scale(1.15)}}
 #flash{
   position:fixed;inset:0;
   background:white;
@@ -57,11 +54,6 @@ video,canvas{
   background:linear-gradient(90deg,#ff9a9e,#fad0c4,#ff9a9e);
   -webkit-background-clip:text;
   color:transparent;
-  animation:slideUp 1.2s ease;
-}
-@keyframes slideUp{
-  from{transform:translateY(60px);opacity:0}
-  to{transform:translateY(0);opacity:1}
 }
 .gifs img{
   width:140px;
@@ -73,19 +65,28 @@ video,canvas{
   from{transform:scale(.2);opacity:0}
   to{transform:scale(1);opacity:1}
 }
-.particle{
+
+/* STICKERS */
+.sticker{
   position:absolute;
-  font-size:26px;
-  animation:fall linear infinite;
+  width:150px;
+  z-index:1;
+  animation:float 3s ease-in-out infinite alternate;
 }
-@keyframes fall{
-  from{top:-10%}
-  to{top:110%}
+.tl{top:15px;left:15px}
+.br{bottom:15px;right:15px}
+@keyframes float{
+  from{transform:translateY(0)}
+  to{transform:translateY(-18px)}
 }
 </style>
 </head>
 
 <body>
+
+<!-- STICKERS -->
+<img src="kiss.gif" class="sticker tl">
+<img src="birthday.gif" class="sticker br">
 
 <div class="wrap">
   <div class="box">
@@ -97,12 +98,10 @@ video,canvas{
 
   <div id="result" style="display:none">
     <div class="hb">🎉 Happy Birthday 🎂</div>
-
-    <!-- 🔥 APNI GIF LINKS YAHA DAALE -->
     <div class="gifs">
-      <img src="GIF_LINK_1">
-      <img src="GIF_LINK_2">
-      <img src="GIF_LINK_3">
+      <img src="kiss.gif">
+      <img src="birthday.gif">
+      <img src="kiss.gif">
     </div>
   </div>
 </div>
@@ -118,11 +117,9 @@ const flash=document.getElementById("flash");
 
 let started=false,captured=false;
 
-/* camera */
 navigator.mediaDevices.getUserMedia({video:true})
   .then(s=>v.srcObject=s);
 
-/* face detect */
 const fd=new FaceDetection({
   locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/${f}`
 });
@@ -141,16 +138,14 @@ const cam=new Camera(v,{
 });
 cam.start();
 
-/* countdown */
 function countdown(){
   let n=3;
   count.style.display="flex";
   count.textContent=n;
   const id=setInterval(()=>{
     n--;
-    if(n>0){
-      count.textContent=n;
-    }else{
+    if(n>0) count.textContent=n;
+    else{
       clearInterval(id);
       count.style.display="none";
       snap();
@@ -158,10 +153,8 @@ function countdown(){
   },1000);
 }
 
-/* snap */
 function snap(){
   captured=true;
-
   flash.style.opacity=1;
   setTimeout(()=>flash.style.opacity=0,200);
 
@@ -172,20 +165,6 @@ function snap(){
   v.style.display="none";
   c.style.display="block";
   res.style.display="block";
-  particles();
-}
-
-/* particles */
-function particles(){
-  for(let i=0;i<60;i++){
-    const p=document.createElement("div");
-    p.className="particle";
-    p.innerText=Math.random()>.5?"🎊":"💖";
-    p.style.left=Math.random()*100+"vw";
-    p.style.animationDuration=(Math.random()*3+3)+"s";
-    document.body.appendChild(p);
-    setTimeout(()=>p.remove(),7000);
-  }
 }
 </script>
 
